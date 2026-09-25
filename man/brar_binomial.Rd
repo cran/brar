@@ -16,45 +16,54 @@ brar_binomial(
 )
 }
 \arguments{
-\item{y}{Vector with number of successes in each group. The first element
+\item{y}{Vector with the number of successes in each group. The first element
 corresponds to the control group, and the remaining elements correspond
 to the treatment groups}
 
-\item{n}{Vector with number of trials in each group. The first element
-corresponds to the control group, and the remaining elements correspond
-to the treatment groups}
-
-\item{a0}{Number of successes parameter of beta prior for common probability
-under the null hypothesis. Defaults to \code{1}}
-
-\item{b0}{Number of failures parameter of beta prior for common probability
-under the null hypothesis. Defaults to \code{1}}
-
-\item{a}{Vector of number of successes parameters of beta priors for
-probabilities in each group under the alternative hypothesis. The first
+\item{n}{Vector with the number of observations in each group. The first
 element corresponds to the control group, and the remaining elements
-correspond to the treatment groups. Defaults to \code{rep(1, length(y))}}
+correspond to the treatment groups}
 
-\item{b}{Vector of number of failures parameters of beta priors for
-probabilities in each group under the alternative hypothesis. The first
-element corresponds to the control group, and the remaining elements
-correspond to the treatment groups. Defaults to \code{rep(1, length(y))}}
+\item{a0}{First shape parameter of the beta prior for the common success
+probability under the null hypothesis. Can be interpreted as prior number
+of successes. Defaults to \code{1}}
+
+\item{b0}{Second shape parameter of the beta prior for the common success
+probability under the null hypothesis. Can be interpreted as prior number
+of failures. Defaults to \code{1}}
+
+\item{a}{Vector of first shape parameters of the beta priors for the success
+probabilities under the alternative hypothesis. Can be interpreted as
+prior numbers of successes. The first element corresponds to the control
+group, and the remaining elements correspond to the treatment groups.
+Defaults to \code{rep(1, length(y))}}
+
+\item{b}{Vector of second shape parameters of the beta priors for the success
+probabilities under the alternative hypothesis. Can be interpreted as
+prior numbers of failures. The first element corresponds to the control
+group, and the remaining elements correspond to the treatment groups.
+Defaults to \code{rep(1, length(y))}}
 
 \item{pH0}{Prior probability of the null hypothesis (i.e., a common
 probability in the control and all treatment groups). Defaults to
-\code{0.5}. Set to \code{0} to obtain Thompson sampling and \code{1} to
-obtain equal randomization}
+\code{0.5}. Set to \code{0} to obtain Thompson sampling and to \code{1}
+to obtain equal randomization}
 
 \item{...}{Other arguments passed to \code{stats::integrate}}
 }
 \value{
-An object of type \code{"brar"}, which is a list with the following
-    elements: \code{"data"} (input data), \code{"prior"} (prior probability
-    of the null hypothesis and prior probabilities of control/treatment
-    superiority), \code{"BF_ij"} (Bayes factor matrix), \code{"posterior"}
-    (posterior probability of the null hypothesis and posterior probabilities
-    of control/treatment superiority), and \code{"prand"} (response-adaptive
-    randomization probabilities).
+An object of class \code{"brar"}. This is a list with the
+  following elements:
+\describe{
+  \item{\code{data}}{The input data.}
+  \item{\code{prior}}{Prior probabilities of the null hypothesis and of
+    each group being superior to all other groups.}
+  \item{\code{BF_ij}}{Matrix of Bayes factors. Entry (i, j) is the Bayes
+    factor of hypothesis i against hypothesis j.}
+  \item{\code{posterior}}{Posterior probabilities of the null hypothesis
+    and of each group being superior to all other groups.}
+  \item{\code{prand}}{Response-adaptive randomization probabilities}
+}
 }
 \description{
 This function computes Bayes factors, posterior probabilities,

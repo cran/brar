@@ -19,28 +19,32 @@ Pmaxi <- function(a, b, i, ...) {
 #' @description This function computes Bayes factors, posterior probabilities,
 #'     and response-adaptive randomization probabilities for binomial outcomes.
 #'
-#' @param y Vector with number of successes in each group. The first element
+#' @param y Vector with the number of successes in each group. The first element
 #'     corresponds to the control group, and the remaining elements correspond
 #'     to the treatment groups
-#' @param n Vector with number of trials in each group. The first element
-#'     corresponds to the control group, and the remaining elements correspond
-#'     to the treatment groups
-#' @param a0 Number of successes parameter of beta prior for common probability
-#'     under the null hypothesis. Defaults to \code{1}
-#' @param b0 Number of failures parameter of beta prior for common probability
-#'     under the null hypothesis. Defaults to \code{1}
-#' @param a Vector of number of successes parameters of beta priors for
-#'     probabilities in each group under the alternative hypothesis. The first
+#' @param n Vector with the number of observations in each group. The first
 #'     element corresponds to the control group, and the remaining elements
-#'     correspond to the treatment groups. Defaults to \code{rep(1, length(y))}
-#' @param b Vector of number of failures parameters of beta priors for
-#'     probabilities in each group under the alternative hypothesis. The first
-#'     element corresponds to the control group, and the remaining elements
-#'     correspond to the treatment groups. Defaults to \code{rep(1, length(y))}
+#'     correspond to the treatment groups
+#' @param a0 First shape parameter of the beta prior for the common success
+#'     probability under the null hypothesis. Can be interpreted as prior number
+#'     of successes. Defaults to \code{1}
+#' @param b0 Second shape parameter of the beta prior for the common success
+#'     probability under the null hypothesis. Can be interpreted as prior number
+#'     of failures. Defaults to \code{1}
+#' @param a Vector of first shape parameters of the beta priors for the success
+#'     probabilities under the alternative hypothesis. Can be interpreted as
+#'     prior numbers of successes. The first element corresponds to the control
+#'     group, and the remaining elements correspond to the treatment groups.
+#'     Defaults to \code{rep(1, length(y))}
+#' @param b Vector of second shape parameters of the beta priors for the success
+#'     probabilities under the alternative hypothesis. Can be interpreted as
+#'     prior numbers of failures. The first element corresponds to the control
+#'     group, and the remaining elements correspond to the treatment groups.
+#'     Defaults to \code{rep(1, length(y))}
 #' @param pH0 Prior probability of the null hypothesis (i.e., a common
 #'     probability in the control and all treatment groups). Defaults to
-#'     \code{0.5}. Set to \code{0} to obtain Thompson sampling and \code{1} to
-#'     obtain equal randomization
+#'     \code{0.5}. Set to \code{0} to obtain Thompson sampling and to \code{1}
+#'     to obtain equal randomization
 #' @param ... Other arguments passed to \code{stats::integrate}
 #'
 #' @inherit brar_normal return
@@ -101,7 +105,7 @@ brar_binomial <- function(y, n, a0 = 1, b0 = 1, a = rep(1, length(y)),
 
     ## data summaries
     K <- length(y)
-    dat <- cbind("Events" = y, "Trials" = n, "Proportion" = y/n)
+    dat <- cbind("Events" = y, "N" = n, "Proportion" = y/n)
     rownames(dat) <- c("Control", paste("Treatment", seq_len(K - 1)))
 
     ## log marginal likelihood under H0

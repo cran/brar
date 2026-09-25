@@ -8,30 +8,35 @@
 #' @param estimate Vector of effect estimates (e.g., a vector of mean
 #'     differences or log odds/hazard/rate ratios). Each estimate quantifies the
 #'     effect of a treatment relative to control
-#' @param sigma Covariance matrix of the effect estimate vector. In case, there
-#'     is only one effect estimate, this is the squared standard error of the
-#'     effect estimate
+#' @param sigma Covariance matrix of the effect estimate vector. If there is
+#'     only one effect estimate, this is the squared standard error of the
+#'     estimate
 #' @param pm Mean vector of the normal prior assigned to the effects under the
-#'     alternative. Defaults to \code{rep(0, length(estimate))}
+#'     alternative hypothesis. Defaults to \code{rep(0, length(estimate))}
 #' @param psigma Covariance matrix of the normal prior assigned to the effects
-#'     under the alternative. In case, there is only one effect estimate, this
-#'     is the prior variance
+#'     under the alternative hypothesis. If there is only one effect estimate,
+#'     this is the prior variance
 #' @param pH0 Prior probability of the point null hypothesis (i.e., all
 #'     treatment effects equal to 0). Defaults to \code{0.5}. Set to \code{0} to
 #'     obtain Thompson sampling and to \code{1} to obtain equal randomization
 #'
-#' @return An object of type \code{"brar"}, which is a list with the following
-#'     elements: \code{"data"} (input data), \code{"prior"} (prior probability
-#'     of the null hypothesis and prior probabilities of control/treatment
-#'     superiority), \code{"BF_ij"} (Bayes factor matrix), \code{"posterior"}
-#'     (posterior probability of the null hypothesis and posterior probabilities
-#'     of control/treatment superiority), and \code{"prand"} (response-adaptive
-#'     randomization probabilities).
+#' @return An object of class \code{"brar"}. This is a list with the
+#'   following elements:
+#' \describe{
+#'   \item{\code{data}}{The input data.}
+#'   \item{\code{prior}}{Prior probabilities of the null hypothesis and of
+#'     each group being superior to all other groups.}
+#'   \item{\code{BF_ij}}{Matrix of Bayes factors. Entry (i, j) is the Bayes
+#'     factor of hypothesis i against hypothesis j.}
+#'   \item{\code{posterior}}{Posterior probabilities of the null hypothesis
+#'     and of each group being superior to all other groups.}
+#'   \item{\code{prand}}{Response-adaptive randomization probabilities}
+#' }
 #'
 #' @author Samuel Pawel
 #'
 #' @examples
-#' ## simulate normal data from four treatment groups
+#' ## simulate normal data from a control group and four treatment groups
 #' set.seed(42)
 #' n <- 10
 #' muc <- 0
@@ -47,14 +52,15 @@
 #' sigma <- vcov(fit)[-1,-1]
 #' pm <- rep(0, K)
 #'
-#' ## 0.5 correlated prior to distribute prior probability equally among treatments
+#' ## prior correlation 0.5 gives the control and each treatment the same prior
+#' ## probability of being the best group
 #' rho <- 0.5
 #' psigma <- matrix(rho, nrow = K, ncol = K)
 #' diag(psigma) <- 1
 #' brar_normal(estimate = estimate, sigma = sigma, pm = pm, psigma = psigma,
 #'             pH0 = 0.5)
 #'
-#' ## brar for only first treatment group
+#' ## brar for the first treatment group only
 #' est <- summary(fit)$coefficients[2,1]
 #' se <- summary(fit)$coefficients[2,2]
 #' brar_normal(est, sigma = se^2, pm = 0, psigma = 1, pH0 = 0.5)
